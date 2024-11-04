@@ -42,13 +42,13 @@ const SideBar = () => {
   }
 
   const handleClickQUanLiTaiKhoanUser = () => {
-    // navigate('/mon-cua-toi')
+    navigate('/quan-li-user')
   }
   const handleTrangChu = () => {
     navigate('/board')
   }
   const handleQuanLiBaiDangBinhLuan = () => {
-    // navigate('/mon-da-luu')
+    navigate('/quan-li-binh-luan-bai-dang')
   }
 
   const [searchValue, setSearchValue] = useState('')

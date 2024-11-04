@@ -46,7 +46,7 @@ app.listen(port, () => {
 
 app.use(express.json()) // Để xử lý JSON từ request body
 
-// Route: Lấy danh sách tất cả mon an
+// Route: Lấy danh sách tất cả mon an(admin)
 app.get('/board', async (req, res) => {
   try {
     const pool = await sql.connect(dbConfig)
@@ -59,8 +59,8 @@ app.get('/board', async (req, res) => {
 })
 
 
-// API lấy chi tiết món theo ID
-app.get('/chitietmonan/:id', authenticateUerToken, async (req, res) => {
+// API lấy chi tiết món theo ID(admin)
+app.get('/chitietmonan/:id', async (req, res) => {
   const { id } = req.params// Lấy id từ params URL
   try {
     // Tạo một truy vấn để lấy chi tiết món ăn từ SQL Server
@@ -80,6 +80,31 @@ from(
   } catch (err) {
     console.error('Lỗi khi truy vấn:', err)
     res.status(500).json({ message: 'Lỗi máy chủ' })
+  }
+})
+
+//API xóa bài viết
+
+app.post('/xoa-bai-viet', async (req, res) => {
+  try {
+    const idMonAn = req.body.ID
+    // const userId = req.userIdAuthen
+    // Kết nối đến SQL Server
+    await sql.connect()
+    // Thực hiện câu lệnh SQL để lưu người dùng vào database
+    const query = 'delete from monAn where ID = @idMonAn'
+
+    // Tạo request mới và thêm các input
+    const Request = new sql.Request()
+    Request.input('idMonAn', sql.Int, idMonAn)
+
+    // Thực hiện câu lệnh insert
+    await Request.query(query)
+
+    res.status(201).json({ success: true, message: 'Xóa món thành công' })
+  } catch (error) {
+    console.error('Error during Lưu món:', error)
+    res.status(500).json({ success: false, message: 'Lỗi trong quá trình xóa món' })
   }
 })
 
@@ -373,3 +398,5 @@ app.get('/searchDanhMuc', async (req, res) => {
     res.status(500).json({ success: false, message: 'Server error' })
   }
 })
+
+

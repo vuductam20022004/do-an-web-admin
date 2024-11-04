@@ -14,13 +14,15 @@ import AuthPage from '~/pages/Auth/login.jsx'
 
 import BoardContent from '~/pages/Boards/BoardContent/BoardContent' // Đường dẫn tới BoardContent
 import AddNewRecipe from '~/pages/add-new-mon/them_mon_moi'
-import RecipeDetail from '~/pages/chi_tiet_mon_an/chi_tiet_mon_an.jsx'
+import RecipeDetail from '~/pages/chi_tiet_mon_an/chi_tiet_mon_an_admin.jsx'
 import Board from '~/pages/Boards/_id.jsx'
 import MonCuaToi from '~/pages/monCuaToi/monCuaToi.jsx'
 import MonDaLuu from '~/pages/monDaLuu/monDaLuu.jsx'
 import ProfilePage from '~/pages/Profile/profile.jsx'
 import Search from '~/pages/search/search.jsx'
 import SearchDanhMuc from './pages/search/searchDanhMuc.jsx'
+import QLBinhLuanBaiDang from '~/pages/quanLiBaiDangvaBinhLuan/quanLiBaiDangvaBinhLuan.jsx'
+import QuanLiUser from '~/pages/quanLiUser/quan_li_user.jsx'
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -34,6 +36,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Routes>
           <Route path='/' element = {<AuthPage />}/>
           <Route path="/board" element={<Board />} />
+          <Route path="/quan-li-binh-luan-bai-dang" element={<QLBinhLuanBaiDang />} />
+          <Route path="/chitietmonan/:ID" element={< RecipeDetail />} />
+          <Route path="/quan-li-user" element={< QuanLiUser />} />
           {/* <Route path="/them_mon_moi" element={<AddNewRecipe />} />
           <Route path="/chitietmonan/:ID" element={< RecipeDetail />} />
           <Route path="/mon-cua-toi" element = {< MonCuaToi /> } />

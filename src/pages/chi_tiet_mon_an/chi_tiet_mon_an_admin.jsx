@@ -16,6 +16,7 @@ import {
 import { AccessTime, Group } from '@mui/icons-material'
 import SaveIcon from '@mui/icons-material/Save'
 import { useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import { red } from '@mui/material/colors'
 
@@ -29,50 +30,49 @@ function RecipeDetail() {
   const [comment, setComment] = useState('')
   const [comments, setComments] = useState([])
   const fullNameUser = localStorage.getItem('token')
+  const [recipe, setRecipe] = useState(null)
+  const navigate = useNavigate()
   const nameUserJWTDecode = jwtDecode(fullNameUser)
 
   const handleAddComment = async () => {
-    try {
-      const token = localStorage.getItem('token')
-      const response = await axios.post('http://localhost:3000/binh-luan', { ID, comment }, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      })
-      if (response.data.success) {
-        // alert('Bình luận Thành Công')
-        setComments([...comments, { fullName: nameUserJWTDecode.fullNameUser, comment: comment }])
-        setComment('')
+    // try {
+    //   const token = localStorage.getItem('token')
+    //   const response = await axios.post('http://localhost:3000/binh-luan', { ID, comment }, {
+    //     headers: {
+    //       'Authorization': `Bearer ${token}`
+    //     }
+    //   })
+    //   if (response.data.success) {
+    //     // alert('Bình luận Thành Công')
+    //     setComments([...comments, { fullName: nameUserJWTDecode.fullNameUser, comment: comment }])
+    //     setComment('')
 
-      } else {
-        alert(response.data.message)
-      }
-    } catch (error) {
-      console.error('Đăng ký lỗi:', error)
-      alert('Bình Luận lỗi')
-    }
+    //   } else {
+    //     alert(response.data.message)
+    //   }
+    // } catch (error) {
+    //   console.error('Đăng ký lỗi:', error)
+    //   alert('Bình Luận lỗi')
+    // }
 
   }
 
-  const [recipe, setRecipe] = useState(null)
 
   //Click button Luu Mon
-  const handleClickLuuMon = async() => {
+  const handleClickXoaBaiViet = async() => {
     try {
-      const token = localStorage.getItem('token')
-      const response = await axios.post('http://localhost:3000/luu-mon', { ID }, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
+      // const token = localStorage.getItem('token')
+      const response = await axios.post('http://localhost:5000/xoa-bai-viet', { ID }, {
       })
       if (response.data.success) {
-        alert('Lưu Thành Công')
+        alert('Xóa Thành Công')
+        navigate('/quan-li-binh-luan-bai-dang')
       } else {
         alert(response.data.message)
       }
     } catch (error) {
       console.error('Đăng ký lỗi:', error)
-      alert('Món này đã được lưu trước kia')
+      alert('Lỗi trong quá trình xóa')
     }
   }
 
@@ -82,12 +82,8 @@ function RecipeDetail() {
     //hàm fetchRecipeDetail để gọi API lấy dữ liệu theo ID
     const fetchRecipeDetail = async (id) => {
       try {
-        const token = localStorage.getItem('token')
-        const response = await fetch(`http://localhost:3000/chitietmonan/${id}`, {
-          headers:{
-            Authorization: `Bearer ${token}`
-          }
-        })
+        // const token = localStorage.getItem('token')
+        const response = await fetch(`http://localhost:5000/chitietmonan/${id}`)
         const data = await response.json()
         setRecipe(data[0])
         setComments(data)
@@ -126,9 +122,9 @@ function RecipeDetail() {
           variant="contained"
           startIcon={<SaveIcon />}
           color="primary"
-          onClick={handleClickLuuMon}
+          onClick={handleClickXoaBaiViet}
         >
-      Lưu món
+      Xóa bài viết
         </Button>
       </Box>
 
