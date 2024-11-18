@@ -20,7 +20,7 @@ const dbConfig = {
   password: '123456',
   server: 'localhost', // Địa chỉ SQL Server
   database: 'do-an-web',
-  port: 3306,
+  port: 3307,
   options: {
     trustServerCertificate: true // Chỉ cần khi server là local hoặc không có chứng chỉ SSL
   }
@@ -248,12 +248,12 @@ app.post('/add-new-mon/them_mon_moi', authenticateUerToken, upload.single('image
 })
 
 
-//API XEm TẤT CẢ CÁC MÓN CỦA TÔI
-app.get('/mon-cua-toi', authenticateUerToken, async (req, res) => {
+//API XEm TẤT CẢ CÁC MÓN CỦA TÔI trong profile user
+app.post('/mon-cua-toi', async (req, res) => {
   try {
-    const userId = req.userIdAuthen
+    const ID = req.body.ID
     const pool = await sql.connect(dbConfig)
-    const result = await pool.request().query(`SELECT * FROM monAn where userId = ${userId}`)
+    const result = await pool.request().query(`SELECT * FROM monAn where userId = ${ID}`)
     res.json(result.recordset) // Trả về kết quả
   } catch (err) {
     console.error('Lỗi khi lấy dữ liệu:', err) // Log lỗi ra console để kiểm tra
@@ -349,6 +349,30 @@ app.get('/search', async (req, res) => {
   }
 })
 
+//API tìm kiếm ADMIN
+
+app.get('/search2', async (req, res) => {
+  const searchValue = req.query.q //Lấy từ URL
+  try {
+    const pool = await sql.connect()
+    const query = `
+      SELECT * FROM monAn 
+      WHERE name LIKE '%' + @searchValue + '%' 
+      OR moTa LIKE '%' + @searchValue + '%'
+    `
+
+    const result = await pool.request()
+      .input('searchValue', sql.NVarChar, searchValue)
+      .query(query)
+
+    res.json(result.recordset)
+  } catch (error) {
+    console.error('Error searching recipes:', error)
+    res.status(500).json({ success: false, message: 'Server error' })
+  }
+})
+
+
 
 //API Bình Luận
 app.post('/binh-luan', authenticateUerToken, async (req, res) => {
@@ -399,4 +423,29 @@ app.get('/searchDanhMuc', async (req, res) => {
   }
 })
 
+//API LẤY TẤT CẢ USERS
 
+app.get('/lay-user', async (req, res) => {
+  try {
+    const pool = await sql.connect(dbConfig)
+    const result = await pool.request().query('select * from users')
+    res.json(result.recordset) // Trả về kết quả
+  } catch (err) {
+    console.error('Lỗi khi lấy dữ liệu:', err) // Log lỗi ra console để kiểm tra
+    res.status(500).send('Lỗi khi lấy dữ liệu') // Trả về lỗi cho client
+  }
+})
+
+//API admin lấy profile của user
+app.post('/profile-user', async (req, res) => {
+  try {
+    const ID = req.body.ID
+    const pool = await sql.connect(dbConfig)
+    const result = await pool.request().query(`select * from users where users.ID = ${ID}`)
+
+    res.json(result.recordset[0]) // Trả về kết quả
+  } catch (err) {
+    console.error('Lỗi khi lấy dữ liệu:', err) // Log lỗi ra console để kiểm tra
+    res.status(500).send('Lỗi khi lấy dữ liệu') // Trả về lỗi cho client
+  }
+})

@@ -2,10 +2,12 @@
 import AppBar from '~/components/AppBar/AppBar'
 import Container from '@mui/material/Container'
 import Box from '@mui/material/Box'
-import { Grid, Card, CardMedia, CardContent, Typography,Avatar, IconButton } from '@mui/material'
+import { Grid, Card, CardMedia, CardContent, Typography,Avatar, IconButton, InputBase, Button } from '@mui/material'
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder'
+import SearchIcon from '@mui/icons-material/Search'
 
-import { Link, useParams } from 'react-router-dom'
+
+import { Link, useParams, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 
 
@@ -13,14 +15,22 @@ import SideBar from '~/pages/Boards/BoardContent/SideBars/SideBar'
 const Search = () => {
   const HEIGHT_AD = '200PX'
   const queryParams = new URLSearchParams(location.search)
-  const searchValue = queryParams.get('query')
-  
+  const searchValue1 = queryParams.get('query')
+  // const searchValue2 = searchValue1
+  const navigate = useNavigate()
+
+  const [searchValue, setSearchValue] = useState('')
   const [data, setSearchResults] = useState([])
+
+  const handleTimKiem = () => {
+    // searchValue1 = searchValue
+  }
+  
   useEffect(() => {
-    if (searchValue) {
+    if (searchValue1) {
       const fetchSearchResults = async () => {
         try {
-          const response = await fetch(`http://localhost:3000/search?q=${searchValue}`)
+          const response = await fetch(`http://localhost:5000/search2?q=${searchValue1}`)
           const data = await response.json()
           setSearchResults(data)
         } catch (error) {
@@ -92,7 +102,23 @@ const Search = () => {
             p: '10px 15px'
             // overflow: 'auto'
           }}>
-            <img style={{ height:HEIGHT_AD, width:'100%', boxSizing:'', padding:'10px 5px' }} src="https://img.thuthuattinhoc.vn/uploads/2019/10/26/hinh-anh-que-huong-con-song-uon-quanh_055458566.jpg" alt="Image AD" />
+            <InputBase
+              placeholder="Tìm kiếm món ăn"
+              startAdornment={<SearchIcon sx={{ mr: 1 }} />}
+              sx={{
+                backgroundColor: '#F0F0F0',
+                padding: '5px 10px',
+                borderRadius: 2,
+                width: '300px',
+                color:'black',
+                ml:'18%'
+              }}
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+            />
+            <Button variant="contained" color="secondary" sx={{ ml: 1 }} onClick={handleTimKiem}>
+              Tìm kiếm
+            </Button>
           </Box>
           <Box sx={{
             bgcolor: (theme) => ( theme.palette.mode === 'dark'? '#34495e' : '#1976d2'),

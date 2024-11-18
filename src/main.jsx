@@ -39,6 +39,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="/quan-li-binh-luan-bai-dang" element={<QLBinhLuanBaiDang />} />
           <Route path="/chitietmonan/:ID" element={< RecipeDetail />} />
           <Route path="/quan-li-user" element={< QuanLiUser />} />
+          <Route path="/search2" element = {<Search /> } />
+          <Route path="/:ID" element = {<ProfilePage /> } />
+          <Route path="/user/mon-cua-toi/:ID" element = {< MonCuaToi /> } />
           {/* <Route path="/them_mon_moi" element={<AddNewRecipe />} />
           <Route path="/chitietmonan/:ID" element={< RecipeDetail />} />
           <Route path="/mon-cua-toi" element = {< MonCuaToi /> } />

@@ -5,30 +5,22 @@ import Box from '@mui/material/Box'
 import { Grid, Card, CardMedia, CardContent, Typography,Avatar, IconButton } from '@mui/material'
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder'
 
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 
 
 import SideBar from '~/pages/Boards/BoardContent/SideBars/SideBar'
+import axios from 'axios'
 const MonCuaToi = () => {
   const HEIGHT_AD = '200PX'
+  const { ID } = useParams()
 
   const [data, setMonAns] = useState([])
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = localStorage.getItem('token')
-        const response = await fetch('http://localhost:3000/mon-cua-toi', {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        })
-        if (!response.ok) {
-          const errorData = await response.json()
-          throw new Error(errorData.message)
-        }
-        const result = await response.json()
-        setMonAns(result)
+        const response = await axios.post('http://localhost:5000/mon-cua-toi', { ID })
+        setMonAns(response.data)
       } catch (error) {
         console.error('Lỗi lấy dữ liệu:', error)
       }

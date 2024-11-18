@@ -10,7 +10,7 @@ import { useState } from 'react'
 import HomeIcon from '@mui/icons-material/Home'
 import AddIcon from '@mui/icons-material/Add'
 import PersonIcon from '@mui/icons-material/Person'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { useEffect } from 'react'
 //  import {} from '~/pages/Boards/BoardContent/add-new-mon/them_mon_moi'
 
@@ -18,6 +18,7 @@ import { useEffect } from 'react'
 // Biểu tượng và tên thương hiệu ở trên cùng
 const BrandLogo = () => {
   const navigate = useNavigate()
+  const location = useLocation()
   const handleLogo = () => {
     navigate('/board')
   }
@@ -49,6 +50,7 @@ const SideBar = () => {
   }
   const handleQuanLiBaiDangBinhLuan = () => {
     navigate('/quan-li-binh-luan-bai-dang')
+    window.location.reload()
   }
 
   const [searchValue, setSearchValue] = useState('')

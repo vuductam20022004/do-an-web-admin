@@ -8,13 +8,13 @@ import Container from '@mui/material/Container'
 
 import SideBar from '~/pages/Boards/BoardContent/SideBars/SideBar'
 import { useEffect, useState } from 'react'
-import { Password } from '@mui/icons-material'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
+import axios from 'axios'
 
 
 function ProfilePage() {
   const HEIGHT_AD = '200PX'
-
+  const { ID } = useParams()
   const [data, setProfile] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
 
@@ -28,18 +28,9 @@ function ProfilePage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = localStorage.getItem('token')
-        const response = await fetch('http://localhost:3000/trang-ca-nhan', {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        })
-        if (!response.ok) {
-          const errorData = await response.json()
-          throw new Error(errorData.message)
-        }
-        const result = await response.json()
-        setProfile(result)
+        const response = await axios.post('http://localhost:5000/profile-user', { ID })
+        // const result = await response.json()
+        setProfile(response.data)
       } catch (error) {
         console.error('Lỗi lấy dữ liệu:', error)
       } finally {
@@ -47,13 +38,13 @@ function ProfilePage() {
       }
     }
     fetchData()
-  }, [])
+  }, [ID])
 
   if (isLoading) {
     return <div>Loading....</div>
   }
 
-  return(
+return(
     <Container disableGutters maxWidth={false} sx={{ height:'100vh' }}>
       <AppBar />
 
@@ -88,7 +79,7 @@ function ProfilePage() {
             <Box flexGrow={1} p={4}>
               <Paper elevation={3} sx={{ padding: 4, maxWidth: 800, margin: 'auto' }}>
                 <Box display="flex" alignItems="center" mb={4}>
-                  <Avatar sx={{ width: 60, height: 60, mr: 2 }} src='src/image/BackgroundLogin/backGroundLogin.jpg' />
+                  <Avatar sx={{ width: 60, height: 60, mr: 2 }} src='src/image/BackgroundLogin/backGroundLogin.jpg'/>
                   <Typography variant="h5">{data.fullName}</Typography>
                   <Box ml={2} p={1} bgcolor="pink" borderRadius={1}>
                     <Typography>{data.core} điểm</Typography>
@@ -111,7 +102,7 @@ function ProfilePage() {
                 </Box>
                 <Box mt={2}>
                   <Typography variant="body2" color="primary" sx={{ textDecoration: 'underline', cursor: 'pointer' }}>
-                    <Link to={'/mon-cua-toi'}> Xem danh sách các món đã đăng </Link>
+                    <Link to={`/user/mon-cua-toi/${ID}`}> Xem danh sách các món đã đăng </Link>
                   </Typography>
                 </Box>
                 <Button variant="contained" color="primary" sx={{ mt: 4, mr:4 }} onClick = { handleChinhSua }>
